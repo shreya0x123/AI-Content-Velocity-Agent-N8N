@@ -1,5 +1,9 @@
 # AI-Content-Velocity-Agent-N8N: Conversational Scripting
 
+<img width="1533" height="354" alt="{754AEE7C-6DA9-44C4-847F-BFE55969A46F}" src="https://github.com/user-attachments/assets/6446119d-0115-4059-8226-a6d57d5f0e01" />
+
+
+
 **The Problem: Scaling High-Quality Voice Content**
 Manual content repurposing (Blog → Audio) is slow and expensive, hindering the speed-to-market for valuable thought leadership. Furthermore, relying on unverified content to feed our AI Voice Agents (Revspot's qualification bots) introduces a risk of inconsistent brand voice and script failure.
 
@@ -29,4 +33,3 @@ The workflow is designed as a multi-stage Agent Orchestration Pipeline, where ea
 | **Logic & Cleaning**      | IF Node / Edit Fields (Set)  | **Guardrails.** The IF node executes reasoning. The Edit Fields node uses JavaScript to perform data transformation (stripping quotes & line  breaks).                          
 
 
-<img width="1533" height="354" alt="{754AEE7C-6DA9-44C4-847F-BFE55969A46F}" src="https://github.com/user-attachments/assets/6446119d-0115-4059-8226-a6d57d5f0e01" />
