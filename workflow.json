@@ -1,0 +1,315 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1XutZgQvvLnXK3mShMRiwxPmGVQo_cW1Df4JOodxk4qg",
+          "mode": "list",
+          "cachedResultName": "Revspot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XutZgQvvLnXK3mShMRiwxPmGVQo_cW1Df4JOodxk4qg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Voice Blog Generator Queue",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XutZgQvvLnXK3mShMRiwxPmGVQo_cW1Df4JOodxk4qg/edit#gid=0"
+        },
+        "event": "rowAdded",
+        "options": {
+          "valueRender": "UNFORMATTED_VALUE"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "883dcfb1-0791-4f0b-9082-ba2ea7dc22c3",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "RW5eoSH1j99FKpNt",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ 'data' }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a Triage Agent. Your only function is to determine content readiness. If the text has less than 250 words OR contains 'DRAFT' (case-insensitive), output ONLY the word: REJECTED. Otherwise, output ONLY the word: APPROVED."
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "=$$\\text{`{{ $('Google Sheets Trigger').item.json['Full Text'] }}`}$$"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        192,
+        0
+      ],
+      "id": "18e290bd-060d-43a5-baff-dc15442abc31",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        592,
+        0
+      ],
+      "id": "0a085169-0d11-4d06-af6e-e2871062b1c4",
+      "name": "Mistral Cloud Chat Model",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "4ai4jMvZPUfYuZfi",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8988cb1f-d6a4-4876-9960-ae7ba0bc4448",
+              "leftValue": "={{ $('Basic LLM Chain').item.json.text.trim() }}",
+              "rightValue": "APPROVED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        144
+      ],
+      "id": "13d761c4-f105-46b7-b892-597e31f83908",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "21m00Tcm4TlvDq8ikWAM",
+          "mode": "list",
+          "cachedResultName": "Rachel"
+        },
+        "text": "={{ $('Basic LLM Chain').item.json.text\n  .trim()\n  .replace(/\"/g, '')         // Removes straight double quotes\n  .replace(/'/g, '')         // Removes straight single quotes\n  .replace(/\\n/g, ' ')       // Replaces line breaks with a space\n  .replace(/“/g, '')         // Removes typographic double quotes (open)\n  .replace(/”/g, '')         // Removes typographic double quotes (close)\n  .replace(/‘/g, '')         // Removes typographic single quotes (open)\n  .replace(/’/g, '')         // Removes typographic single quotes (close)\n  .replace(/`/g, '')         // Removes backticks often used in LLM code formatting\n}}",
+        "additionalOptions": {
+          "outputFormat": "mp3_22050_32"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        1216,
+        48
+      ],
+      "id": "c51cd0e8-a07a-4ab1-a2e4-c660c59b9838",
+      "name": "Convert text to speech",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "WacG9bHxA9ItvUjm",
+          "name": "ElevenLabs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "audioFile",
+        "name": "={{ $('Google Sheets Trigger').item.json[\"Full Text\"].substring(0, 30) }}_Voice_Asset.mp3",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1OS3VdDtrP_vb9o-NdhqwvVbhijt1jCI5",
+          "mode": "list",
+          "cachedResultName": "Revspot Demo Outputs",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1OS3VdDtrP_vb9o-NdhqwvVbhijt1jCI5"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1728,
+        48
+      ],
+      "id": "4981a1cd-5c17-47ea-b181-925ff0d06491",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "vx1dGHnbfOtT0Qtx",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const binaryData = $input.all()[0].binary.data;\n\n// Return the binary data object with a clear key name\nreturn [\n  {\n    json: {\n      file_name: 'voice_asset.mp3'\n    },\n    binary: {\n      audioFile: binaryData // This key name is now clean for Google Drive\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        48
+      ],
+      "id": "6db4e583-9049-4875-9bd0-ec8fac830895",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c703d544-202b-40fc-a82f-663b57495276",
+              "name": "test_text",
+              "value": "={{ $('Basic LLM Chain').item.json.text.trim().replace(/\"/g, '').replace(/'/g, '').replace(/\\n/g, ' ') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": "=",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        48
+      ],
+      "id": "c5415ed6-2bab-4167-b7e2-a9f31e4331e6",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert text to speech": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3d08c7e9841a6aa0e1fca85b0c373162006ec0eaf0784570d0d97e6f852ec162"
+  }
+}
