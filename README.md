@@ -15,7 +15,6 @@ The workflow is designed as a multi-stage Agent Orchestration Pipeline, where ea
 | **Data Cleansing**                | Edit Fields (Set)            | Robustness: Cleans the LLM output using JavaScript methods to strip line breaks, smart quotes, and hidden characters—ensuring the string is pure **ASCII** for the external API.                                    
 | **Editor Agent (Transformation)** | Mistral LLM                  | Persona Prompting Rewrites the text with a System Role of Professional Podcast Host to ensure the tone is conversational and engaging.                                |
 | **Delivery System**               | ElevenLabs, Google Drive     | **Persistence & Accountability:** Generates the **audio** and orchestrates the **upload to Google Drive**, ensuring the final public **Audio URL** is written back to the source spreadsheet (closing the feedback loop).     
-|-----------------------------------|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------
 
 
 **Tools used and their purpose**
@@ -28,6 +27,5 @@ The workflow is designed as a multi-stage Agent Orchestration Pipeline, where ea
 | **Data Source / Trigger** | Google Sheets                | **Database/Trigger.** Stores the raw content and the final public URL, initiating the workflow on new row additions.                                                                |
 | **Persistence Layer**     | Google Drive                 | **File Storage/Hosting.** Stores the final binary MP3 file and generates the crucial public Audio URL.                                                                               
 | **Logic & Cleaning**      | IF Node / Edit Fields (Set)  | **Guardrails.** The IF node executes reasoning. The Edit Fields node uses JavaScript to perform data transformation (stripping quotes & line  breaks).                          
-|---------------------------|------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------
 
 <img width="1533" height="354" alt="{754AEE7C-6DA9-44C4-847F-BFE55969A46F}" src="https://github.com/user-attachments/assets/6446119d-0115-4059-8226-a6d57d5f0e01" />
