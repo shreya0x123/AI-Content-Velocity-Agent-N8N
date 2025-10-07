@@ -21,7 +21,7 @@ The workflow is designed as a multi-stage Agent Orchestration Pipeline, where ea
 | **Delivery System**               | ElevenLabs, Google Drive     | **Persistence & Accountability:** Generates the **audio** and orchestrates the **upload to Google Drive**, ensuring the final public **Audio URL** is written back to the source spreadsheet (closing the feedback loop).     
 
 
-**Tools used and their purpose**
+**Tools used and their purpose**:
 
 | **Category**             | **Tool**                     | **Function in the Project**                                                                                                                             
 |---------------------------|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------
