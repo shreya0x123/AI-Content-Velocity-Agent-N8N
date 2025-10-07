@@ -28,4 +28,5 @@ The workflow is designed as a multi-stage Agent Orchestration Pipeline, where ea
 | **Persistence Layer**     | Google Drive                 | **File Storage/Hosting.** Stores the final binary MP3 file and generates the crucial public Audio URL.                                                                               
 | **Logic & Cleaning**      | IF Node / Edit Fields (Set)  | **Guardrails.** The IF node executes reasoning. The Edit Fields node uses JavaScript to perform data transformation (stripping quotes & line  breaks).                          
 
+
 <img width="1533" height="354" alt="{754AEE7C-6DA9-44C4-847F-BFE55969A46F}" src="https://github.com/user-attachments/assets/6446119d-0115-4059-8226-a6d57d5f0e01" />
